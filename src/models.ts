@@ -120,13 +120,24 @@ export interface IPrice24SocketMessage {
   "l": string;    // Low price
   "c": string;    // Last price
   "w": string;    // Weighted average price
-  "v": string;    // Total traded base asset volume
-  "q": string;    // Total traded quote asset volume
+  "v": string;    // Total traded base asset quoteVolume
+  "q": string;    // Total traded quote asset quoteVolume
   "O": number;    // Statistics open time
   "C": number;    // Statistics close time
   "F": number;    // First trade ID
   "L": number;    // Last trade Id
   "n": number;    // Total number of trades
+}
+
+export interface ICoinSyncedData {
+  [key : string] : string
+  name : string
+  symbol : string;
+  large: string;
+  lastPrice: string;
+  priceChange: string;
+  priceChangePercent: string;
+  quoteVolume : string
 }
 
 export interface ICoinLogo {
@@ -139,4 +150,26 @@ export interface ICoinLogo {
   large: string;
   slug: string;
   score: number;
+}
+
+export interface ICoinSliceState {
+  symbols : ISymbol[],
+  coins : ICoinSyncedData[]
+  sortConfig : {
+    sortOrder : 'ascn' | 'desc',
+    sortKey : keyof ICoinSyncedData
+  }
+}
+
+export interface ICoinPreparedData {
+  symbol: string // BinanceAPI
+  lastPrice: string // BinanceAPI
+  priceChange: string // BinanceAPI
+  priceChangePercent: string // BinanceAPI
+  quoteVolume: string
+}
+
+export interface ICoinSyncState {
+  coinsPriceData: ICoinPreparedData[],
+  syncedData: ICoinSyncedData[]
 }

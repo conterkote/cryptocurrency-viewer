@@ -5,7 +5,6 @@ import {
   ICoinsPairQuery,
   IPrice24SocketMessage,
   ISymbol,
-  IWebsocketQuery
 } from "../../models";
 import {isPriceMessage} from "../Slices/coinSync";
 

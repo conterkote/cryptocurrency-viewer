@@ -7,16 +7,15 @@ export interface ICoinRowsProps {
   icon: string,
   lastPrice: string,
   priceChangePercent: string,
-  volume : string
+  quoteVolume : string
   priceChange : string
 }
 
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa'
 
-
-function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange, volume}: ICoinRowsProps) {
+function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange, quoteVolume}: ICoinRowsProps) {
   const lastPriceDecimal = new Decimal(lastPrice)
-  const volumeDecimal = new Decimal(volume)
+  const volumeDecimal = new Decimal(quoteVolume)
   const priceChangePercentDecimal = new Decimal(priceChangePercent)
   const preparedLastPrice = lastPriceDecimal.toString()
   const preparedVolume = volumeDecimal.toString()
@@ -48,7 +47,7 @@ function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange
         {priceChangePercent}%
         {isNegative ? <FaCaretDown size={16} className={"pb-0.5"} /> : <FaCaretUp size={16} className={"pb-0.5"} />}
       </div>
-      <div className={`flex items-center px-0.5 md:px-1 lg:px-2 group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub justify-start`}>
+      <div className={`scrollbar-thin scrollbar-thumb-indigo-50 overflow-x-scroll flex items-center px-0.5 md:px-1 lg:px-2 group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub justify-start`}>
         ${preparedVolume}
       </div>
       <div className={`hidden md:flex items-center group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub justify-center`}>

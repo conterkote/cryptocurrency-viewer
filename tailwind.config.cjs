@@ -12,5 +12,7 @@ module.exports = {
       borderOpacity : ['active']
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

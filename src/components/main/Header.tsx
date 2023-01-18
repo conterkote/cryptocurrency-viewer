@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import {IHeaderProps} from "../../models";
 import HeaderItem from "./HeaderItem";
-import classes from "./style/CurrencyChooseWrapper.module.css";
+import ConvertTo from "./ConvertTo";
 
 function Header({name}: IHeaderProps) {
   return (
@@ -17,10 +17,9 @@ function Header({name}: IHeaderProps) {
             <HeaderItem text={'Favourite'} />
             <HeaderItem text={'Search'} />
           </div>
-
         </div>
       </div>
-
+      <ConvertTo />
     </div>
 
   );

@@ -1,32 +1,8 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 import {binancePriceApi} from "../Apis/binancePriceApi";
-import {ICoinLogo, ICoinPrice, IPrice24SocketMessage, ISymbol} from "../../models";
+import {ICoinLogo, ICoinPrice, ICoinSyncedData, IPrice24SocketMessage, ISymbol} from "../../models";
 import {RootState} from "../store";
 import {logosApi} from "../Apis/logosApi";
-
-export interface ICoinPreparedData {
-  symbol: string // BinanceAPI
-  lastPrice: string // BinanceAPI
-  priceChange: string // BinanceAPI
-  priceChangePercent: string // BinanceAPI
-  volume : string
-}
-
-export interface ICoinSyncedData {
-  name : string
-  symbol : string;
-  large: string;
-  lastPrice: string;
-  priceChange: string;
-  priceChangePercent: string;
-  volume : string
-}
-
-export interface ICoinSyncState {
-  symbols: ISymbol[],
-  coinsPriceData: ICoinPreparedData[],
-  syncedData: ICoinSyncedData[]
-}
 
 export function isQueryPriceResponse(response : IPrice24SocketMessage | ICoinPrice[] | undefined): response is ICoinPrice[] {
   if (response) return Array.isArray(response)
@@ -38,8 +14,20 @@ export function isPriceMessage(response : IPrice24SocketMessage | ICoinPrice[] |
   return false;
 }
 
+export interface ICoinPreparedData {
+  symbol: string // BinanceAPI
+  lastPrice: string // BinanceAPI
+  priceChange: string // BinanceAPI
+  priceChangePercent: string // BinanceAPI
+  quoteVolume: string
+}
+
+export interface ICoinSyncState {
+  coinsPriceData: ICoinPreparedData[],
+  syncedData: ICoinSyncedData[]
+}
+
 const initialState: ICoinSyncState = {
-  symbols: ["BTC", "BNB", "ETH", "SAND", "XRP", "SOL", "MANA", "LTC"],
   coinsPriceData: [],
   syncedData: []
 }
@@ -47,25 +35,15 @@ const initialState: ICoinSyncState = {
 const coinSync = createSlice({
   initialState,
   name: 'coinSync',
-  reducers: {
-    updatePrices : (state, { payload } : PayloadAction<IPrice24SocketMessage>) => {
-      let updateTarget = state.syncedData.find(coin => coin.symbol === payload.s.replace(/USDT/, ''))
-      const { c : lastPrice, P : priceChangePercent, p : priceChange, v : volume } = payload
-      if (updateTarget) {
-        updateTarget.priceChange = priceChange
-        updateTarget.priceChangePercent = priceChangePercent
-        updateTarget.lastPrice = lastPrice
-        updateTarget.volume = volume
-      }
-    }
+  reducers : {
   },
   extraReducers(builder) {
     builder.addMatcher(binancePriceApi.endpoints.fetchLivePrice.matchFulfilled, (state, action) => {
       if (isQueryPriceResponse(action.payload))
       action.payload.forEach(coin => {
-        const {lastPrice, priceChange, priceChangePercent, symbol, volume} = coin
+        const {lastPrice, priceChange, priceChangePercent, symbol, quoteVolume} = coin
         const coinPriceData = {
-          lastPrice, priceChange, priceChangePercent, symbol, volume
+          lastPrice, priceChange, priceChangePercent, symbol, quoteVolume
         }
         state.coinsPriceData.push(coinPriceData)
       })
@@ -73,18 +51,17 @@ const coinSync = createSlice({
     builder.addMatcher(logosApi.endpoints.fetchLogos.matchFulfilled, (state, action) => {
       state.coinsPriceData.forEach(coin => {
         const logoData = action.payload.coins.find(logoCoin => logoCoin.symbol === coin.symbol.replace(/USDT/, ''))
-        const { symbol, large, name } = logoData as ICoinLogo;
-        const syncedCoin = { ...coin, symbol, large, name }
-        state.syncedData.push(syncedCoin)
+        if (logoData) {
+          const { symbol, large, name } = logoData as ICoinLogo;
+          const syncedCoin = { ...coin, symbol, large, name }
+          state.syncedData.push(syncedCoin)
+        }
       })
     })
   }
 })
 
 export const selectCurrentSymbolPriceData = (state: RootState, symbol : ISymbol) => state.coinSync.syncedData.find(coin => coin.symbol === symbol);
-export const selectSymbols = (state: RootState) => state.coinSync.symbols
 export const selectSyncedCoinsData = (state: RootState) => state.coinSync.syncedData;
-
-export const { updatePrices } = coinSync.actions
 
 export default coinSync.reducer
