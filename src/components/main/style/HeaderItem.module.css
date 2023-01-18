@@ -1,0 +1,8 @@
+.bgHover:hover {
+  --background-position-header-item: 0%;
+  background: linear-gradient(117deg, rgb(154, 51, 254) 0%, rgb(13, 175, 211) var(--background-position-header-item), rgb(154, 51, 254) 100%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+/*# sourceMappingURL=HeaderItem.module.css.map */

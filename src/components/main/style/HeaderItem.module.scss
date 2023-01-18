@@ -1,0 +1,7 @@
+.bgHover:hover {
+  --background-position-header-item: 0%;
+
+  background: linear-gradient(117deg, rgba(154,51,254,1) 0%, rgba(13,175,211,1) var(--background-position-header-item), rgba(154,51,254,1) 100%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}

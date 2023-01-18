@@ -1,0 +1,6 @@
+.coinRow {
+  display: grid;
+  grid-template-columns: 80px 140px;
+}
+
+/*# sourceMappingURL=CoinRow.module.css.map */
