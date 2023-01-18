@@ -1,17 +1,20 @@
 import './App.css'
 import Header from "./components/main/Header";
-import CoinsTable from "./components/table/CoinsTable";
-import CurrencyChooseWrapper from "./components/main/CurrencyChooseWrapper";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Start from "./pages/Start";
 
 function App() {
   return (
-    <div className="h-screen bg-dark-sub">
-      <Header name={"coinViewer"}/>
-      <div className="container mx-auto">
-        <CurrencyChooseWrapper/>
-        <CoinsTable />
+    <BrowserRouter>
+      <div className="bg-dark-sub">
+        <Header name={"coinViewer"}/>
+        <div className="h-screen">
+          <Routes>
+            <Route path={"/"} element={<Start/>}/>
+          </Routes>
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
 

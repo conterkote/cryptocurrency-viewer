@@ -7,8 +7,6 @@
 .holder {
   height: 33%;
   width: 100%;
-  position: absolute;
-  bottom: 0;
   background: linear-gradient(117deg, rgb(23, 23, 26) 100%, rgb(27, 29, 37) 100%);
 }
 

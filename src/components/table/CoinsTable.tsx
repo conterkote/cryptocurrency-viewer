@@ -5,13 +5,14 @@ import {useFetchLivePriceQuery} from "../../store/Apis/binancePriceApi";
 import {useSelector} from "react-redux";
 import {
   isPriceMessage,
-  selectCurrentSymbols,
+  selectSymbols,
   selectSyncedCoinsData, updatePrices
 } from "../../store/Slices/coinSync";
 import {useAppDispatch} from "../../store/store";
+import CoinTableHeader from "./CoinTableHeader";
 
 function CoinsTable() {
-  const mainSymbols = useSelector(selectCurrentSymbols)
+  const mainSymbols = useSelector(selectSymbols)
   const syncedCoinData = useSelector(selectSyncedCoinsData)
   const { data } = useFetchLivePriceQuery(mainSymbols)
   useFetchLogosQuery(mainSymbols, { skip : !data})
@@ -31,10 +32,13 @@ function CoinsTable() {
                                                    name={coin.name}
                                                    priceChangePercent={coin.priceChangePercent}
                                                    lastPrice={coin.lastPrice}
+                                                   volume={coin.volume}
+                                                   priceChange={coin.priceChange}
                                                    icon={coin.large} />)
   }
   return (
     <div className="w-full grid bg-gradient-to-b from-dark-main rounded-xl to-dark-sub">
+      <CoinTableHeader />
       { coinRows }
     </div>
   );

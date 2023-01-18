@@ -9,6 +9,7 @@ export interface ICoinPreparedData {
   lastPrice: string // BinanceAPI
   priceChange: string // BinanceAPI
   priceChangePercent: string // BinanceAPI
+  volume : string
 }
 
 export interface ICoinSyncedData {
@@ -18,6 +19,7 @@ export interface ICoinSyncedData {
   lastPrice: string;
   priceChange: string;
   priceChangePercent: string;
+  volume : string
 }
 
 export interface ICoinSyncState {
@@ -48,11 +50,12 @@ const coinSync = createSlice({
   reducers: {
     updatePrices : (state, { payload } : PayloadAction<IPrice24SocketMessage>) => {
       let updateTarget = state.syncedData.find(coin => coin.symbol === payload.s.replace(/USDT/, ''))
-      const { c : lastPrice, P : priceChangePercent, p : priceChange } = payload
+      const { c : lastPrice, P : priceChangePercent, p : priceChange, v : volume } = payload
       if (updateTarget) {
         updateTarget.priceChange = priceChange
         updateTarget.priceChangePercent = priceChangePercent
         updateTarget.lastPrice = lastPrice
+        updateTarget.volume = volume
       }
     }
   },
@@ -60,9 +63,9 @@ const coinSync = createSlice({
     builder.addMatcher(binancePriceApi.endpoints.fetchLivePrice.matchFulfilled, (state, action) => {
       if (isQueryPriceResponse(action.payload))
       action.payload.forEach(coin => {
-        const {lastPrice, priceChange, priceChangePercent, symbol} = coin
+        const {lastPrice, priceChange, priceChangePercent, symbol, volume} = coin
         const coinPriceData = {
-          lastPrice, priceChange, priceChangePercent, symbol
+          lastPrice, priceChange, priceChangePercent, symbol, volume
         }
         state.coinsPriceData.push(coinPriceData)
       })
@@ -79,9 +82,8 @@ const coinSync = createSlice({
 })
 
 export const selectCurrentSymbolPriceData = (state: RootState, symbol : ISymbol) => state.coinSync.syncedData.find(coin => coin.symbol === symbol);
-export const selectCurrentSymbols = (state: RootState, symbol : ISymbol) => state.coinSync.symbols
+export const selectSymbols = (state: RootState) => state.coinSync.symbols
 export const selectSyncedCoinsData = (state: RootState) => state.coinSync.syncedData;
-export const selectCoinsPriceData = (state: RootState) => state.coinSync.coinsPriceData;
 
 export const { updatePrices } = coinSync.actions
 
