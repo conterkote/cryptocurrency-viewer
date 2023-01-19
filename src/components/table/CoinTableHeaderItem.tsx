@@ -9,8 +9,8 @@ export interface CoinHeaderProperties {
   "Name / Symbol": "symbol"
   "Symbol": "symbol"
   "Price": "lastPrice"
-  "Change ($ / %)": "priceChange"
-  "Change": "priceChange"
+  "Change ($ / %)": "priceChangePercent"
+  "Change": "priceChangePercent"
   "Volume 24hr": "quoteVolume"
 }
 
