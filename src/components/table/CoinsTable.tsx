@@ -24,11 +24,13 @@ function isValidCoins(coins: ICoinSyncedData[] | []): coins is ICoinSyncedData[]
 
 function CoinsTable() {
   const mainSymbols = useSelector(selectSymbols)
-  const preparedCoinsData = useSelector(selectCoins)
-  const syncedCoinsData = useSelector(selectSyncedCoinsData)
   const {data} = useFetchLivePriceQuery(mainSymbols)
   useFetchLogosQuery(mainSymbols, {skip: !data})
+
+  const syncedCoinsData = useSelector(selectSyncedCoinsData)
+
   const dispatch = useAppDispatch()
+
   useEffect(() => {
     if (isValidCoins(syncedCoinsData)) dispatch(updateCoins(syncedCoinsData))
   }, [syncedCoinsData]);
@@ -39,6 +41,8 @@ function CoinsTable() {
       dispatch(updatePrices(data))
     }
   }, [data]);
+
+  const preparedCoinsData = useSelector(selectOrderedCoins)
 
   let coinRows = null
   if (preparedCoinsData.length > 0) {

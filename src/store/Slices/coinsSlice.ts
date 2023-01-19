@@ -4,81 +4,112 @@ import {ICoinSyncedData, IPrice24SocketMessage, ISymbol} from "../../models";
 import Decimal from "decimal.js";
 
 export interface ICoinSliceState {
-  symbols : ISymbol[],
-  coins : ICoinSyncedData[]
-  sortConfig : {
-    sortOrder : 'ascn' | 'desc',
-    sortKey : keyof ICoinSyncedData
+  symbols: ISymbol[],
+  coins: ICoinSyncedData[]
+  sortConfig: {
+    sortOrder: 'ascn' | 'desc',
+    sortKey: keyof ICoinSyncedData
   }
 }
 
 const initialState: ICoinSliceState = {
-  symbols : ["BTC", "BNB", "ETH", "SAND", "XRP", "SOL", "MANA", "LTC"],
-  coins : [],
-  sortConfig : {
-    sortOrder : 'desc',
-    sortKey : "volume"
+  symbols: ["BTC", "BNB", "ETH", "SAND", "XRP", "SOL", "MANA", "LTC"],
+  coins: [],
+  sortConfig: {
+    sortOrder: 'ascn',
+    sortKey: "quoteVolume"
   }
 }
 
 const coinsSlice = createSlice({
-  name : 'coins',
+  name: 'coins',
   initialState,
   reducers: {
-    updatePrices : (state, { payload } : PayloadAction<IPrice24SocketMessage>) => {
+    updatePrices: (state, {payload}: PayloadAction<IPrice24SocketMessage>) => {
       let updateTarget = state.coins.find(coin => coin.symbol === payload.s.replace(/USDT/, ''))
-      const { c : lastPrice, P : priceChangePercent, p : priceChange, v : volume } = payload
+      const {c: lastPrice, P: priceChangePercent, p: priceChange, q: quoteVolume} = payload
       if (updateTarget) {
         updateTarget.priceChange = priceChange
         updateTarget.priceChangePercent = priceChangePercent
         updateTarget.lastPrice = lastPrice
-        updateTarget.volume = volume
+        updateTarget.quoteVolume = quoteVolume
       }
     },
-    updateCoins : (state, { payload } : PayloadAction<ICoinSyncedData[]>) => {
+    updateCoins: (state, {payload}: PayloadAction<ICoinSyncedData[]>) => {
       return {
-        symbols : state.symbols,
-        coins : [...payload],
-        sortConfig : state.sortConfig
+        symbols: state.symbols,
+        coins: [...payload],
+        sortConfig: state.sortConfig
+      }
+    },
+    updateOrder : (state, { payload } : PayloadAction<keyof ICoinSyncedData>) => {
+      const currentOrder = state.sortConfig.sortOrder
+      const currentKey = state.sortConfig.sortKey
+      if (payload === currentKey) {
+      const newOrder = currentOrder === 'ascn' ? 'desc' : 'ascn'
+        return {
+          coins : state.coins,
+          symbols : state.symbols,
+          sortConfig: {
+            sortKey: currentKey,
+            sortOrder: newOrder
+          }
+        }
+      } else {
+        return {
+          coins : state.coins,
+          symbols : state.symbols,
+          sortConfig: {
+            sortKey: payload,
+            sortOrder: 'desc'
+          }
+        }
       }
     }
   }
 })
 
-export const selectSymbols = (state : RootState) => state.coins.symbols
-export const selectCoins = (state : RootState) => state.coins.coins
+export const selectSymbols = (state: RootState) => state.coins.symbols
+export const selectCoins = (state: RootState) => state.coins.coins
 
-export const selectOrderedCoins = (state : RootState) => {
-  const a = [...state.coins.coins]
-  const sortKey = state.coins.sortConfig.sortKey
-  const sortOrder = state.coins.sortConfig.sortOrder
-  switch (sortOrder) {
-    case 'ascn':
-      return a.sort((a, b) => {
-        if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1
-        else if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1
-        return 0
-      })
-    case 'desc':
-      return a.sort((a, b) => {
-        if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1
-        else if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1
-        return 0
-      })
-  }
-}
+export const selectSortedKey = (state : RootState) => state.coins.sortConfig.sortKey
+export const selectSortedOrder = (state : RootState) => state.coins.sortConfig.sortOrder
 
-
-export const selectCoinsDecreasedBy =
-  (state : RootState, property: string) => {
+export const selectOrderedCoins = (state: RootState) => {
+  if (state.coins.coins.length > 0) {
     const a = [...state.coins.coins]
+    const sortKey = state.coins.sortConfig.sortKey
+    const sortOrder = state.coins.sortConfig.sortOrder
     return a.sort((a, b) => {
-      if (new Decimal(a[property]).greaterThan(b[property])) return -1
-      else if (!new Decimal(a[property]).greaterThan(b[property])) return 1
-      return 0
+      switch (sortOrder) {
+        case 'ascn': {
+          if (sortKey !== 'symbol') {
+            if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1
+            else if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1
+            return 0
+          } else {
+            if (!(a[sortKey] > b[sortKey])) return -1
+            else if (a[sortKey] > b[sortKey]) return 1
+            return 0
+          }
+        }
+        case 'desc':
+          if (sortKey !== 'symbol') {
+            if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1
+            else if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1
+            return 0
+          }
+          else {
+            if (a[sortKey] > b[sortKey]) return -1
+            else if (!(a[sortKey] > b[sortKey])) return 1
+            return 0
+          }
+      }
     })
   }
+  return []
+}
 
-export const { updatePrices, updateCoins } = coinsSlice.actions
+export const {updatePrices, updateCoins, updateOrder} = coinsSlice.actions
 
 export default coinsSlice
