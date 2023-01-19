@@ -1,11 +1,11 @@
 import React, {CSSProperties} from 'react';
 
 function ConvertTo({}) {
-  const style = {background: 'linear-gradient(117deg, rgba(23,23,26,1) 100%, rgba(27,29,37,1) 100%)'} as CSSProperties
   return (
-    <div style={style}
-         className={`w-48 py-1 m-auto rounded-b-2xl text-[16px] text-white flex items-center justify-center`}>
-      <p>Convert to</p>
+    <div
+      className={`py-1 rounded-b-2xl text-[16px] text-white flex items-center justify-center`}>
+      <p>RUB</p>
+      <img className={`w-3 ml-0.5 pb-0.5`} src="https://s2.coinmarketcap.com/static/cloud/img/fiat-flags/RUB.svg"/>
     </div>
   );
 }

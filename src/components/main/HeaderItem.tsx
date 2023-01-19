@@ -18,7 +18,7 @@ function HeaderItem({ text } : IHeaderItemProps) {
   return (
     // <p className="mr-8 hover:text-gradient-to-bl hover:from-colorful-1 hover:to-colorful-2">
     <p onMouseMove={onMouseEnter} style={style}
-      className={`mr-8 ${classes.bgHover} hover:text-transparent hover:bg-clip-text`}>
+      className={`mr-8 ${classes.bgHover} cursor-pointer py-1 hover:text-transparent hover:bg-clip-text`}>
       {text}
     </p>
   );

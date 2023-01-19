@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FaAngleDown, FaAngleUp} from "react-icons/fa";
 import {useSelector} from "react-redux";
 import {selectSortedKey, selectSortedOrder, updateOrder} from "../../store/Slices/coinsSlice";
@@ -43,21 +43,21 @@ function CoinTableHeaderItem({itemName, align, className}: ICoinTableHeaderItemP
   if (sortedKey === property[itemName]) {
     content = (
       <>
+        {itemName}
         <div className="group-first-of-type:hidden px-0.5 md:px-1 lg:px-1.5">
           <FaAngleUp className={`${sortedOrder === 'ascn' && 'text-colorful-1'} text-[6px] md:text-[8px] lg:text-[10px]`}/>
           <FaAngleDown className={`${sortedOrder === 'desc' && 'text-colorful-1'} text-[6px] md:text-[8px] lg:text-[10px]`} />
         </div>
-        {itemName}
       </>
     )
   } else {
     content = (
       <>
+        {itemName}
         <div className="group-first-of-type:hidden px-0.5 md:px-1 lg:px-1.5">
           <FaAngleUp className={`text-[6px] md:text-[8px] lg:text-[10px]`}/>
           <FaAngleDown className={`text-[6px] md:text-[8px] lg:text-[10px]`}/>
         </div>
-        {itemName}
       </>
     )
   }

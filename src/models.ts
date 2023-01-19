@@ -152,15 +152,6 @@ export interface ICoinLogo {
   score: number;
 }
 
-export interface ICoinSliceState {
-  symbols : ISymbol[],
-  coins : ICoinSyncedData[]
-  sortConfig : {
-    sortOrder : 'ascn' | 'desc',
-    sortKey : keyof ICoinSyncedData
-  }
-}
-
 export interface ICoinPreparedData {
   symbol: string // BinanceAPI
   lastPrice: string // BinanceAPI
@@ -172,4 +163,13 @@ export interface ICoinPreparedData {
 export interface ICoinSyncState {
   coinsPriceData: ICoinPreparedData[],
   syncedData: ICoinSyncedData[]
+}
+
+export interface ICoinSliceState {
+  symbols: ISymbol[],
+  coins: ICoinSyncedData[]
+  sortConfig: {
+    sortOrder: 'ascn' | 'desc',
+    sortKey: keyof ICoinSyncedData
+  }
 }

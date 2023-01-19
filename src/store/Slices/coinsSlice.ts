@@ -1,16 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
-import {ICoinSyncedData, IPrice24SocketMessage, ISymbol} from "../../models";
+import {ICoinSliceState, ICoinSyncedData, IPrice24SocketMessage} from "../../models";
 import Decimal from "decimal.js";
-
-export interface ICoinSliceState {
-  symbols: ISymbol[],
-  coins: ICoinSyncedData[]
-  sortConfig: {
-    sortOrder: 'ascn' | 'desc',
-    sortKey: keyof ICoinSyncedData
-  }
-}
 
 const initialState: ICoinSliceState = {
   symbols: ["BTC", "BNB", "ETH", "SAND", "XRP", "SOL", "MANA", "LTC"],
@@ -70,7 +61,6 @@ const coinsSlice = createSlice({
 })
 
 export const selectSymbols = (state: RootState) => state.coins.symbols
-export const selectCoins = (state: RootState) => state.coins.coins
 
 export const selectSortedKey = (state : RootState) => state.coins.sortConfig.sortKey
 export const selectSortedOrder = (state : RootState) => state.coins.sortConfig.sortOrder

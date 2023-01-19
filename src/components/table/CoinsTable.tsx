@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect } from 'react';
 import CoinRow from "./CoinRow";
 import {useFetchLogosQuery} from "../../store/Apis/logosApi";
 import {useFetchLivePriceQuery} from "../../store/Apis/binancePriceApi";
@@ -10,13 +10,13 @@ import {
 import {useAppDispatch} from "../../store/store";
 import CoinTableHeader from "./CoinTableHeader";
 import {
-  selectCoins,
   selectOrderedCoins,
   selectSymbols,
   updateCoins,
   updatePrices
 } from '../../store/Slices/coinsSlice'
 import {ICoinSyncedData} from "../../models";
+import CoinRowsSkeleton from "../Skeletons/CoinRowsSkeleton";
 
 function isValidCoins(coins: ICoinSyncedData[] | []): coins is ICoinSyncedData[] {
   return coins.length > 0
@@ -55,7 +55,8 @@ function CoinsTable() {
                                                       priceChange={coin.priceChange}
                                                       icon={coin.large}/>)
 
-  }
+  } else coinRows = <CoinRowsSkeleton rowsCount={mainSymbols.length}/>
+
   return (
     <div className="w-full grid bg-gradient-to-b from-dark-main rounded-xl to-dark-sub">
       <CoinTableHeader/>
