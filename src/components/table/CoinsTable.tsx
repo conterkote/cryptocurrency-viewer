@@ -17,6 +17,7 @@ import {
 } from '../../store/Slices/coinsSlice'
 import {ICoinSyncedData} from "../../models";
 import CoinRowsSkeleton from "../Skeletons/CoinRowsSkeleton";
+import {selectConvertCurrency, selectConvertRatio} from "../../store/Slices/convertSlice";
 
 function isValidCoins(coins: ICoinSyncedData[] | []): coins is ICoinSyncedData[] {
   return coins.length > 0
@@ -28,6 +29,8 @@ function CoinsTable() {
   useFetchLogosQuery(mainSymbols, {skip: !data})
 
   const syncedCoinsData = useSelector(selectSyncedCoinsData)
+  const currentRatio = useSelector(selectConvertRatio);
+  const currentCurrency = useSelector(selectConvertCurrency);
 
   const dispatch = useAppDispatch()
 
@@ -53,6 +56,8 @@ function CoinsTable() {
                                                       lastPrice={coin.lastPrice}
                                                       quoteVolume={coin.quoteVolume}
                                                       priceChange={coin.priceChange}
+                                                      currencyRatio={currentRatio}
+                                                      currentCurrency={currentCurrency}
                                                       icon={coin.large}/>)
 
   } else coinRows = <CoinRowsSkeleton rowsCount={mainSymbols.length}/>

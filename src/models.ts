@@ -173,3 +173,27 @@ export interface ICoinSliceState {
     sortKey: keyof ICoinSyncedData
   }
 }
+
+export type IFiatSymbol = string;
+
+export type IUSDRatio = Record<IFiatSymbol, number>
+
+export interface IUSDRatioResponse {
+  date: string;
+  usd: IUSDRatio;
+}
+
+export interface IConvertSliceState {
+  currentCurrency : string
+  currentRatioToUsd : Record<IFiatSymbol, number>,
+  popularFiats: fiatPair
+  allFiats: fiatPair
+  modalState : 'hidden' | 'block'
+}
+
+type fiatPair = Record<IFiatSymbol, IFiatInfo>
+
+export interface IFiatInfo {
+  currencySymbol : IFiatSymbol
+  currencyName : string
+}

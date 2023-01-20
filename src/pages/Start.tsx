@@ -3,7 +3,7 @@ import CoinsTable from "../components/table/CoinsTable";
 
 function Start() {
   return (
-    <div className="container mx-auto py-12">
+    <div className="container mx-auto py-32">
       <CoinsTable/>
     </div>
 

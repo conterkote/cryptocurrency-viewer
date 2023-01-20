@@ -6,7 +6,7 @@ import Start from "./pages/Start";
 function App() {
   return (
     <BrowserRouter>
-      <div className="bg-dark-sub">
+      <div className="bg-dark-sub antialiased">
         <Header name={"coinViewer"}/>
         <div className="h-screen">
           <Routes>

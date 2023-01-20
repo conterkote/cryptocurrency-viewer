@@ -2,9 +2,12 @@ import React, {CSSProperties} from 'react';
 import {IHeaderProps} from "../../models";
 import HeaderItem from "./HeaderItem";
 import ConvertTo from "./ConvertTo";
-import ConvertToModal from "./Modals/ConvertToModal";
+import ConvertToModal from "../Modals/ConvertTo/ConvertToModal";
+import {useSelector} from "react-redux";
+import {selectModalState} from "../../store/Slices/convertSlice";
 
 function Header({name}: IHeaderProps) {
+  const convertModalState = useSelector(selectModalState);
   return (
     <>
       <div className={"z-[1] fixed w-full top-0"}>
@@ -25,7 +28,7 @@ function Header({name}: IHeaderProps) {
           </div>
         </div>
       </div>
-      <ConvertToModal display={'block'} />
+      {convertModalState === 'block' ? <ConvertToModal/> : null}
     </>
   );
 }

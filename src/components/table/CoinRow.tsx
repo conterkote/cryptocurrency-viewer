@@ -7,21 +7,26 @@ export interface ICoinRowsProps {
   icon: string,
   lastPrice: string,
   priceChangePercent: string,
-  quoteVolume : string
-  priceChange : string
+  quoteVolume : string,
+  priceChange : string,
+  currencyRatio : number,
+  currentCurrency : string
 }
 
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa'
 
-function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange, quoteVolume}: ICoinRowsProps) {
-  const lastPriceDecimal = new Decimal(lastPrice)
-  const volumeDecimal = new Decimal(quoteVolume)
-  const priceChangePercentDecimal = new Decimal(priceChangePercent)
+function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange, quoteVolume, currencyRatio, currentCurrency}: ICoinRowsProps) {
+  Decimal.set({
+    precision : 9
+  })
+  const lastPriceDecimal = new Decimal(lastPrice).mul(currencyRatio)
+  const volumeDecimal = new Decimal(quoteVolume).div(1000000).mul(currencyRatio)
+  const priceChangePercentDecimal = new Decimal(priceChangePercent).mul(currencyRatio)
+  const priceChangeDecimal = new Decimal(priceChange);
   const preparedLastPrice = lastPriceDecimal.toString()
   const preparedVolume = volumeDecimal.toString()
-  const isNegative = priceChangePercentDecimal.isNegative()
-  const priceChangeDecimal = new Decimal(priceChange);
   const preparedPriceChange = priceChangeDecimal.toString().replace(/-/, '');
+  const isNegative = priceChangePercentDecimal.isNegative()
   return (
     <div
       className={`text-[11px] md:text-[13px] lg:text-[14px] xl:text-[15px] 2xl:text-[16px] border-opacity-10 border-y-2 border-y-dark-sub group
@@ -37,10 +42,10 @@ function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange
         <p>{symbol}</p>
       </div>
       <div className="flex items-center px-0.5 md:px-1 lg:px-2 group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub justify-start">
-        ${preparedLastPrice}
+        {currentCurrency}{preparedLastPrice}
       </div>
       <div className={`flex items-center px-0.5 md:px-1 lg:px-2 justify-end group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub`}>
-        ${preparedPriceChange}
+        {currentCurrency}{preparedPriceChange}
 
       </div>
       <div className={`flex items-center px-0.5 md:px-1 lg:px-2 justify-start ${isNegative ? 'text-red-500' : 'text-green-500'} group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub`}>
@@ -48,7 +53,7 @@ function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange
         {isNegative ? <FaCaretDown size={16} className={"pb-0.5"} /> : <FaCaretUp size={16} className={"pb-0.5"} />}
       </div>
       <div className={`scrollbar-thin scrollbar-thumb-indigo-50 overflow-x-scroll flex items-center px-0.5 md:px-1 lg:px-2 group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub justify-start`}>
-        ${preparedVolume}
+        {currentCurrency}{preparedVolume}M
       </div>
       <div className={`hidden md:flex items-center group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub justify-center`}>
         Details
