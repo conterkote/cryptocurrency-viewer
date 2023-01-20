@@ -33,14 +33,14 @@ const coinsSlice = createSlice({
         sortConfig: state.sortConfig
       }
     },
-    updateOrder : (state, { payload } : PayloadAction<keyof ICoinSyncedData>) => {
+    updateOrder: (state, {payload}: PayloadAction<keyof ICoinSyncedData>) => {
       const currentOrder = state.sortConfig.sortOrder
       const currentKey = state.sortConfig.sortKey
       if (payload === currentKey) {
-      const newOrder = currentOrder === 'ascn' ? 'desc' : 'ascn'
+        const newOrder = currentOrder === 'ascn' ? 'desc' : 'ascn'
         return {
-          coins : state.coins,
-          symbols : state.symbols,
+          coins: state.coins,
+          symbols: state.symbols,
           sortConfig: {
             sortKey: currentKey,
             sortOrder: newOrder
@@ -48,8 +48,8 @@ const coinsSlice = createSlice({
         }
       } else {
         return {
-          coins : state.coins,
-          symbols : state.symbols,
+          coins: state.coins,
+          symbols: state.symbols,
           sortConfig: {
             sortKey: payload,
             sortOrder: 'desc'
@@ -62,38 +62,24 @@ const coinsSlice = createSlice({
 
 export const selectSymbols = (state: RootState) => state.coins.symbols
 
-export const selectSortedKey = (state : RootState) => state.coins.sortConfig.sortKey
-export const selectSortedOrder = (state : RootState) => state.coins.sortConfig.sortOrder
+export const selectSortedKey = (state: RootState) => state.coins.sortConfig.sortKey
+export const selectSortedOrder = (state: RootState) => state.coins.sortConfig.sortOrder
 
 export const selectOrderedCoins = (state: RootState) => {
   if (state.coins.coins.length > 0) {
     const a = [...state.coins.coins]
     const sortKey = state.coins.sortConfig.sortKey
     const sortOrder = state.coins.sortConfig.sortOrder
+    const sortMultiplier = sortOrder === 'ascn' ? 1 : -1
     return a.sort((a, b) => {
-      switch (sortOrder) {
-        case 'ascn': {
-          if (sortKey !== 'symbol') {
-            if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1
-            else if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1
-            return 0
-          } else {
-            if (!(a[sortKey] > b[sortKey])) return -1
-            else if (a[sortKey] > b[sortKey]) return 1
-            return 0
-          }
-        }
-        case 'desc':
-          if (sortKey !== 'symbol') {
-            if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1
-            else if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1
-            return 0
-          }
-          else {
-            if (a[sortKey] > b[sortKey]) return -1
-            else if (!(a[sortKey] > b[sortKey])) return 1
-            return 0
-          }
+      if (sortKey !== 'symbol') {
+        if (!new Decimal(a[sortKey]).greaterThan(b[sortKey])) return -1 * sortMultiplier
+        else if (new Decimal(a[sortKey]).greaterThan(b[sortKey])) return 1 * sortMultiplier
+        return 0
+      } else {
+        if (a[sortKey] > b[sortKey]) return -1 * sortMultiplier
+        else if (a[sortKey] < b[sortKey]) return 1 * sortMultiplier
+        return 0
       }
     })
   }

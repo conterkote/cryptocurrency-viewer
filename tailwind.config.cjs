@@ -9,6 +9,7 @@ module.exports = {
         'colorful-1' : '#0DAFD3',
         'colorful-2' : '#9A33FE',
       },
+      display: ["group-hover"],
       borderOpacity : ['active']
     },
   },

@@ -11,8 +11,6 @@ import {isPriceMessage} from "../Slices/coinSync";
 // GET /api/v3/ticker/24hr?symbol='BTCUSDT' -- 24 hr ticket price change statistics
 // GET /api/v3/ticker/24hr?symbols=['BTCUSDT', 'ETHUSDT'] -- 24 hr ticket prices change statistics []
 
-// const apiKey = 'CaHOlEFyEXL2TbdjgDE8bQz4CulRbSUqVEMCRa2GODqVayUw3saer8LUriKRSi8t'
-
 const binancePriceApi = createApi({
   reducerPath: 'binancePrice',
   baseQuery: fetchBaseQuery({
@@ -73,7 +71,6 @@ const binancePriceApi = createApi({
     }
   }
 })
-
 
 export const { useFetchAveragePriceQuery, useFetchLivePriceQuery} = binancePriceApi
 export {binancePriceApi}

@@ -9,7 +9,7 @@ export interface ICoinRowsSkeletonProps {
 function CoinRowsSkeleton({rowsCount} : ICoinRowsSkeletonProps) {
   const content = []
   for (let i = 0; i < rowsCount; i++) {
-    content.push(<CoinRowSkeleton />)
+    content.push(<CoinRowSkeleton key={i + '-CoinRowSkeleton'}/>)
   }
   return (
     <>
