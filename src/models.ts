@@ -197,3 +197,10 @@ export interface IFiatInfo {
   currencySymbol : IFiatSymbol
   currencyName : string
 }
+
+export interface IFiatConvertData {
+  currentSymbol : IFiatSymbol,
+  currentRatioToUsd : number,
+}
+
+export type ILogosData = Pick<ICoinLogo, 'large' | 'name'>

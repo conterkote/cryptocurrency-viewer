@@ -19,9 +19,9 @@ function Header({name}: IHeaderProps) {
                 <p className="text-[18px]">{name}</p>
               </div>
               <div className="header-items flex items items-center text-[18px]">
-                <HeaderItem text={'Trending'} />
-                <HeaderItem text={'Favourite'} />
-                <HeaderItem text={'Search'} />
+                <HeaderItem text={'Trending'} route={'/'}/>
+                <HeaderItem text={'Favourite'} route={'/favourite'} />
+                <HeaderItem text={'Search'} route={'/'} />
               </div>
             </div>
             <ConvertTo />

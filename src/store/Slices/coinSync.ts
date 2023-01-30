@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {binancePriceApi} from "../Apis/binancePriceApi";
-import {ICoinLogo, ICoinPrice, ICoinSyncedData, IPrice24SocketMessage, ISymbol} from "../../models";
+import {ICoinPrice, ILogosData, IPrice24SocketMessage, ISymbol} from "../../models";
 import {RootState} from "../store";
 import {logosApi} from "../Apis/logosApi";
 
@@ -24,12 +24,14 @@ export interface ICoinPreparedData {
 
 export interface ICoinSyncState {
   coinsPriceData: ICoinPreparedData[],
-  syncedData: ICoinSyncedData[]
+  logosHashMap: Record<ISymbol, ILogosData | undefined>,
+  logosStatus : 'idle' | 'fulfilled'
 }
 
 const initialState: ICoinSyncState = {
   coinsPriceData: [],
-  syncedData: []
+  logosHashMap : {},
+  logosStatus : 'idle'
 }
 
 const coinSync = createSlice({
@@ -38,30 +40,58 @@ const coinSync = createSlice({
   reducers : {
   },
   extraReducers(builder) {
+    builder.addMatcher(binancePriceApi.endpoints.fetchLivePrice.matchPending, (state, action) => {
+      return {
+        ...state,
+        coinsPriceData : []
+      }
+    })
     builder.addMatcher(binancePriceApi.endpoints.fetchLivePrice.matchFulfilled, (state, action) => {
-      if (isQueryPriceResponse(action.payload))
-      action.payload.forEach(coin => {
-        const {lastPrice, priceChange, priceChangePercent, symbol, quoteVolume} = coin
-        const coinPriceData = {
-          lastPrice, priceChange, priceChangePercent, symbol, quoteVolume
+      if (isQueryPriceResponse(action.payload)) {
+        const prepared = action.payload.map(coin => {
+          const {lastPrice, priceChange, priceChangePercent, symbol, quoteVolume} = coin
+          return {
+            lastPrice, priceChange, priceChangePercent, symbol : symbol.replace(/USDT/, ''), quoteVolume
+          };
+        })
+        return {
+          ...state,
+          coinsPriceData : prepared
         }
-        state.coinsPriceData.push(coinPriceData)
-      })
+      }
     })
     builder.addMatcher(logosApi.endpoints.fetchLogos.matchFulfilled, (state, action) => {
-      state.coinsPriceData.forEach(coin => {
-        const logoData = action.payload.coins.find(logoCoin => logoCoin.symbol === coin.symbol.replace(/USDT/, ''))
-        if (logoData) {
-          const { symbol, large, name } = logoData as ICoinLogo;
-          const syncedCoin = { ...coin, symbol, large, name }
-          state.syncedData.push(syncedCoin)
+      const logosHashMap: Record<ISymbol, ILogosData> = {}
+      action.payload.coins.forEach(coin => {
+        if (coin.market_cap_rank <= 1000) {
+          logosHashMap[coin.symbol] = {
+            name: coin.name,
+            large: coin.large
+          }
         }
       })
+      return {
+        ...state,
+        logosHashMap : logosHashMap,
+        logosStatus : 'fulfilled'
+      }
     })
   }
 })
 
-export const selectCurrentSymbolPriceData = (state: RootState, symbol : ISymbol) => state.coinSync.syncedData.find(coin => coin.symbol === symbol);
-export const selectSyncedCoinsData = (state: RootState) => state.coinSync.syncedData;
+
+export const selectSyncedCoinsData = (state: RootState) => {
+  if (state.coinSync.logosStatus === 'fulfilled') return state.coinSync.coinsPriceData.map(coin => {
+    const {name, large} = state.coinSync.logosHashMap[coin.symbol] as ILogosData
+    return {
+      ...coin,
+      name,
+      large
+    }
+  })
+  else return []
+}
+
+export const selectCurrentLogosStatus = (state: RootState) => state.coinSync.logosStatus
 
 export default coinSync.reducer

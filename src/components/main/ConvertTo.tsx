@@ -4,11 +4,12 @@ import {FaCaretDown} from "react-icons/fa";
 import ConvertToModal from "../Modals/ConvertTo/ConvertToModal";
 import {useFetchUsdRatioQuery} from "../../store/Apis/fiatApi";
 import {useAppDispatch} from "../../store/store";
-import {switchModalState} from "../../store/Slices/convertSlice";
+import {selectCurrentCurrency, switchModalState} from "../../store/Slices/convertSlice";
+import {useSelector} from "react-redux";
 
 function ConvertTo({}) {
   useFetchUsdRatioQuery()
-  const currentCurrency = 'USD'
+  const currentCurrency = useSelector(selectCurrentCurrency)
   const dispatch = useAppDispatch()
   const onClickHandle = () => dispatch(switchModalState())
 

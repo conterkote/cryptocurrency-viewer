@@ -16,7 +16,7 @@ const logosApi = createApi({
           }
         }
       }),
-      fetchLogos : builder.query<IFetchLogosResponse, ISymbol[]>({
+      fetchLogos : builder.query<IFetchLogosResponse, null>({
         query : () => {
           return {
             url : '/search/',

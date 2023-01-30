@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
-import {ICoinSliceState, ICoinSyncedData, IPrice24SocketMessage} from "../../models";
+import {ICoinSliceState, ICoinSyncedData, IPrice24SocketMessage, ISymbol} from "../../models";
 import Decimal from "decimal.js";
 
 const initialState: ICoinSliceState = {
@@ -16,6 +16,18 @@ const coinsSlice = createSlice({
   name: 'coins',
   initialState,
   reducers: {
+    addSymbol: (state, {payload}: PayloadAction<ISymbol>) => {
+      return {
+        ...state,
+        symbols : [...state.symbols, payload]
+      }
+    },
+    updateSymbols: (state, {payload}: PayloadAction<ISymbol[]>) => {
+      return {
+        ...state,
+        symbols : payload
+      }
+    },
     updatePrices: (state, {payload}: PayloadAction<IPrice24SocketMessage>) => {
       let updateTarget = state.coins.find(coin => coin.symbol === payload.s.replace(/USDT/, ''))
       const {c: lastPrice, P: priceChangePercent, p: priceChange, q: quoteVolume} = payload

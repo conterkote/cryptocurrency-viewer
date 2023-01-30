@@ -19,14 +19,6 @@ const binancePriceApi = createApi({
   tagTypes: [],
   endpoints: (builder) => {
     return {
-      fetchAveragePrice: builder.query<ICoinAveragePrice, ICoinsPairQuery>({
-        query: (coinPair) => ({
-          url: '/avgPrice',
-          params: {
-            symbol: coinPair
-          }
-        })
-      }),
       fetchLivePrice: builder.query<ICoinPrice[] | IPrice24SocketMessage , ISymbol[]>({
         query: (symbols) => {
           const coinPairs = symbols.map(symbol => symbol + 'USDT')
@@ -34,7 +26,7 @@ const binancePriceApi = createApi({
             url: '/ticker/24hr',
             params: {
               symbols: JSON.stringify(coinPairs)
-            }
+            },
           }
         },
         async onCacheEntryAdded(symbols, {updateCachedData, cacheDataLoaded, cacheEntryRemoved}) {
@@ -72,5 +64,5 @@ const binancePriceApi = createApi({
   }
 })
 
-export const { useFetchAveragePriceQuery, useFetchLivePriceQuery} = binancePriceApi
+export const { useFetchLivePriceQuery} = binancePriceApi
 export {binancePriceApi}

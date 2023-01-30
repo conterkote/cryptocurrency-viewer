@@ -1,13 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {fiatApi} from "../Apis/fiatApi";
-import {IConvertSliceState} from "../../models";
+import {IConvertSliceState, IFiatConvertData} from "../../models";
 import {RootState} from "../store";
 
 
 
 
 const initialState: IConvertSliceState = {
-  currentCurrency : 'ZAR',
+  currentCurrency : 'RUB',
   currentRatioToUsd : {
 
   },
@@ -89,16 +89,20 @@ const convertSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addMatcher(fiatApi.endpoints.fetchUsdRatio.matchFulfilled, (state, {payload}) => {
-      console.log(payload)
       state.currentRatioToUsd = payload.usd;
     })
   }
 })
 
-export const selectConvertRatio = (state : RootState) =>
-  state.convert.currentRatioToUsd[state.convert.currentCurrency.toLowerCase()]
-export const selectConvertCurrency = (state: RootState) =>
-  state.convert.allFiats[state.convert.currentCurrency].currencySymbol
+export const selectFiatConvertData = (state : RootState): IFiatConvertData => {
+  return {
+    currentRatioToUsd : state.convert.currentRatioToUsd[state.convert.currentCurrency.toLowerCase()],
+    currentSymbol : state.convert.allFiats[state.convert.currentCurrency].currencySymbol
+  }
+}
+
+export const selectCurrentCurrency = (state : RootState) =>
+  state.convert.currentCurrency
 
 export const selectModalState = (state: RootState) => state.convert.modalState
 export const selectAllFiat = (state : RootState) => state.convert.allFiats;

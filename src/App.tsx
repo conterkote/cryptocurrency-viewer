@@ -2,6 +2,7 @@ import './App.css'
 import Header from "./components/main/Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Start from "./pages/Start";
+import Favourite from "./pages/Favourite";
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
         <Header name={"coinViewer"}/>
         <div className="h-screen">
           <Routes>
-            <Route path={"/"} element={<Start/>}/>
+            <Route path={"/"} element={<Start />}/>
+            <Route path={"/favourite"} element={<Favourite />}/>
           </Routes>
         </div>
       </div>
