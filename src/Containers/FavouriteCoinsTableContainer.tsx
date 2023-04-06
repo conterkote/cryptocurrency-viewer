@@ -15,7 +15,7 @@ function FavouriteCoinsTableContainer({}) {
   const dispatch = useAppDispatch()
 
   const favouriteSymbols = useSelector(selectFavouriteSymbols)
-  const {data, isFetching, isSuccess} = useFetchLivePriceQuery(favouriteSymbols, {refetchOnMountOrArgChange : true})
+  const {data, isFetching, error} = useFetchLivePriceQuery(favouriteSymbols, {refetchOnMountOrArgChange : true})
   useFetchLogosQuery(null, {skip: !data})
 
   const syncedCoinsData = useSelector(selectSyncedCoinsData)
@@ -32,10 +32,8 @@ function FavouriteCoinsTableContainer({}) {
                   preparedFiatData={preparedFiatData}
                   isFetching={isFetching}
                   skeletonCount={favouriteSymbols.length}
+                  error={error}
       />
-      <button className={`w-full opacity-0 hover:opacity-100 transition text-[48px] py-2`}>
-        +
-      </button>
     </div>
   );
 }

@@ -21,8 +21,8 @@ function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange
   })
   const lastPriceDecimal = new Decimal(lastPrice).mul(currencyRatio)
   const volumeDecimal = new Decimal(quoteVolume).div(1000000).mul(currencyRatio)
-  const priceChangePercentDecimal = new Decimal(priceChangePercent).mul(currencyRatio)
-  const priceChangeDecimal = new Decimal(priceChange);
+  const priceChangePercentDecimal = new Decimal(priceChangePercent)
+  const priceChangeDecimal = new Decimal(priceChange).mul(currencyRatio);
   const preparedLastPrice = lastPriceDecimal.toString()
   const preparedVolume = volumeDecimal.toString()
   const preparedPriceChange = priceChangeDecimal.toString().replace(/-/, '');
@@ -37,7 +37,7 @@ function CoinRow({symbol, name, icon, lastPrice, priceChangePercent, priceChange
         <img src={icon} alt="404" className="rounded-full w-[16px] h-[16px] md:w-[20px] md:h-[20px] lg:h-8 lg:w-8 m-auto">
         </img>
       </div>
-      <div className="flex items-center px-0.5 md:px-1 lg:px-2 group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub content-start">
+      <div className="justify-between flex items-center px-0.5 md:px-1 lg:px-2 group-hover:border-opacity-50 border-opacity-10 border-l-2 border-l-dark-sub content-start">
         <p className="mr-4 hidden lg:block">{name}</p>
         <p>{symbol}</p>
       </div>

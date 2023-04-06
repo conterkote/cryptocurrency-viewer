@@ -22,7 +22,7 @@ function ConvertToModal() {
 
   const renderFiat = ([fiat, fiatInfo]: [string, IFiatInfo]) =>
     (<div key={fiat}
-          onClick={() => onChooseCurrency(fiat.toUpperCase())}
+          onClick={() => onChooseCurrency(fiat)}
           className={`flex px-2 rounded-xl cursor-pointer group hover:bg-white/20 items-center text-white text-[14px]`}>
       <img className={"w-4 mr-2"} src={`https://s2.coinmarketcap.com/static/cloud/img/fiat-flags/${fiat}.svg`}
            alt={"404"}/>
@@ -34,6 +34,8 @@ function ConvertToModal() {
 
   const popularFiatContent = Object.entries(popularFiats).map(renderFiat)
   const allFiatContent = Object.entries(allFiats).map(renderFiat)
+
+  let content = {}
 
   return (
     <div
@@ -51,7 +53,6 @@ function ConvertToModal() {
           <CurrencyGroup name={'Fiat currencies'} content={allFiatContent}/>
         </div>
       </div>
-
     </div>
   );
 }

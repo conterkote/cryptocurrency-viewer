@@ -75,8 +75,9 @@ const convertSlice = createSlice({
   initialState,
   reducers : {
     updateCurrency : (state, { payload }) => {
+      const newCurrency = payload.toUpperCase()
       return {
-        currentCurrency : payload,
+        currentCurrency : newCurrency,
         currentRatioToUsd : state.currentRatioToUsd,
         modalState : state.modalState,
         popularFiats : state.popularFiats,

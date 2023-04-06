@@ -18,7 +18,9 @@ const store = configureStore({
     [logosApi.reducerPath] : logosApi.reducer,
     [binancePriceApi.reducerPath] : binancePriceApi.reducer,
   },
-  middleware : (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck : false})
+  middleware : (getDefaultMiddleware) => getDefaultMiddleware(
+    // {serializableCheck : false}
+  )
     .concat(logosApi.middleware)
     .concat(binancePriceApi.middleware)
     .concat(fiatApi.middleware)

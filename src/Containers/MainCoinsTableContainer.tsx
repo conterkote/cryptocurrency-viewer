@@ -26,9 +26,8 @@ export function isValidCoins(coins: ICoinSyncedData[] | Partial<ICoinSyncedData>
 function MainCoinsTableContainer() {
   const mainSymbols = useSelector(selectSymbols)
 
-  const {data, isFetching} = useFetchLivePriceQuery(mainSymbols, {refetchOnMountOrArgChange : true})
-  useFetchLogosQuery(null, {skip: !data})
-
+  const {data, isFetching, error} = useFetchLivePriceQuery(mainSymbols, {refetchOnMountOrArgChange : true})
+  const {data : logosData} = useFetchLogosQuery(null, {skip: !data})
 
   const dispatch = useAppDispatch()
   const syncedCoinsData = useSelector(selectSyncedCoinsData)
@@ -46,6 +45,7 @@ function MainCoinsTableContainer() {
                   preparedFiatData={preparedFiatData}
                   isFetching={isFetching}
                   skeletonCount={mainSymbols.length}
+                  error={error}
       />
     </div>
   );
