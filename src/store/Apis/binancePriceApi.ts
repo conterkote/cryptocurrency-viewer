@@ -1,8 +1,6 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {
-  ICoinAveragePrice,
   ICoinPrice,
-  ICoinsPairQuery,
   IPrice24SocketMessage,
   ISymbol,
 } from "../../models";
@@ -47,7 +45,7 @@ const binancePriceApi = createApi({
             const listener = (e: MessageEvent) => {
               const parsedData: IPrice24SocketMessage = JSON.parse(e.data);
               if (isPriceMessage(parsedData)) {
-                updateCachedData(draft => {
+                updateCachedData(() => {
                   return parsedData
                 })
               }
@@ -59,10 +57,21 @@ const binancePriceApi = createApi({
           await cacheEntryRemoved
           ws.close()
         }
+      }),
+      fetchTokenPrice : builder.query<ICoinPrice, ISymbol>({
+        query : (symbol) => {
+          const coinPair = symbol + 'USDT'
+          return {
+            url : '/ticker/24hr',
+            params : {
+              symbol : JSON.stringify(coinPair)
+            }
+          }
+        }
       })
     }
   }
 })
 
-export const { useFetchLivePriceQuery} = binancePriceApi
+export const { useFetchLivePriceQuery, useFetchTokenPriceQuery} = binancePriceApi
 export {binancePriceApi}
