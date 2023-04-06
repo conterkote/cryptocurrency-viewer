@@ -14,8 +14,10 @@ function FavouriteCoinsTableContainer({}) {
   const dispatch = useAppDispatch()
 
   const favouriteSymbols = useSelector(selectFavouriteSymbols)
-  const {data, isFetching, error} = useFetchLivePriceQuery(favouriteSymbols, {refetchOnMountOrArgChange : true})
-  useFetchLogosQuery(null, {skip: !data})
+  const {data, isFetching, error} = useFetchLivePriceQuery(favouriteSymbols,
+    {refetchOnMountOrArgChange : true, skip : favouriteSymbols.length === 0}
+  )
+  useFetchLogosQuery(null, {skip: !data || !favouriteSymbols})
 
   const syncedCoinsData = useSelector(selectSyncedCoinsData)
 

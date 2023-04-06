@@ -13,10 +13,10 @@ function Favourite() {
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <AddToken />
       </Modal>
-      <div className={`w-full flex justify-center cursor-pointer group`}
+      <div className={`w-full flex justify-center cursor-pointer py-10 group`}
            onClick={() => setIsOpen(true)}
       >
-        <div className={`w-12 h-12 bg-gradient-to-br rounded-full from-colorful-1  to-colorful-2 opacity-0 py-2 group-hover:opacity-100 transition relative`}>
+        <div className={`w-12 h-12 bg-gradient-to-br rounded-full from-colorful-1  to-colorful-2 opacity-0 group-hover:opacity-100 transition relative`}>
           <FaPlus className={`absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-white opacity-0 group-hover:opacity-100 transition text-xl`}/>
         </div>
       </div>
