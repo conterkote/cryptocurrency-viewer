@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 :root {
+    /*font-family: 'Sofia Sans', sans-serif;*/
     font-family: 'Sofia Sans', sans-serif;
 }

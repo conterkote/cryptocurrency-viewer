@@ -7,6 +7,7 @@ import coinsSlice from "./Slices/coinsSlice";
 import {fiatApi} from "./Apis/fiatApi";
 import convertSlice from "./Slices/convertSlice";
 import favouriteSlice from "./Slices/favouriteSlice";
+import coinStatsApi from "./Apis/coinStatsApi";
 
 const store = configureStore({
   reducer : {
@@ -17,6 +18,7 @@ const store = configureStore({
     [fiatApi.reducerPath] : fiatApi.reducer,
     [logosApi.reducerPath] : logosApi.reducer,
     [binancePriceApi.reducerPath] : binancePriceApi.reducer,
+    [coinStatsApi.reducerPath] : coinStatsApi.reducer
   },
   middleware : (getDefaultMiddleware) => getDefaultMiddleware(
     // {serializableCheck : false}
@@ -24,6 +26,7 @@ const store = configureStore({
     .concat(logosApi.middleware)
     .concat(binancePriceApi.middleware)
     .concat(fiatApi.middleware)
+    .concat(coinStatsApi.middleware)
 },)
 
 export type RootState = ReturnType<typeof store.getState>

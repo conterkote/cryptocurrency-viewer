@@ -204,3 +204,83 @@ export interface IFiatConvertData {
 }
 
 export type ILogosData = Pick<ICoinLogo, 'large' | 'name'>
+
+export interface ICoinStatsNewsResponse {
+  news: INews[];
+}
+
+export interface INews {
+  id:             string;
+  feedDate:       number;
+  source:         string;
+  title:          string;
+  icon:           string;
+  imgURL:         string;
+  description:    string;
+  link:           string;
+  sourceLink:     string;
+  reactionsCount: { [key: string]: number };
+  shareURL:       string;
+  relatedCoins:   string[];
+  content:        boolean;
+  coins:          ICoinsNewsChange[];
+}
+
+export interface ICoinsNewsChange {
+  coinKeyWords:      string;
+  coinPercent:       number;
+  coinTitleKeyWords: string;
+  coinNameKeyWords:  string;
+  coinIdKeyWords:    string;
+}
+
+export interface INewsWithLogos extends INews {
+  id:             string;
+  feedDate:       number;
+  source:         string;
+  title:          string;
+  icon:           string;
+  imgURL:         string;
+  description:    string;
+  link:           string;
+  sourceLink:     string;
+  reactionsCount: { [key: string]: number };
+  shareURL:       string;
+  relatedCoins:   string[];
+  content:        boolean;
+  coins:         ICoinsNewsChangeWithLogos[];
+}
+
+export interface ICoinsNewsChangeWithLogos extends ICoinsNewsChange{
+  coinKeyWords:      string;
+  coinPercent:       number;
+  coinTitleKeyWords: string;
+  coinNameKeyWords:  string;
+  coinIdKeyWords:    string;
+  large ?: string
+}
+
+export interface ICoinGeckoGlobalResponse {
+  data: ICoinGeckoGlobalData;
+}
+
+export interface ICoinGeckoGlobalData {
+  active_cryptocurrencies:              number;
+  upcoming_icos:                        number;
+  ongoing_icos:                         number;
+  ended_icos:                           number;
+  markets:                              number;
+  total_market_cap:                     { [key: string]: number };
+  total_volume:                         { [key: string]: number };
+  market_cap_percentage:                { [key: string]: number };
+  market_cap_change_percentage_24h_usd: number;
+  updated_at:                           number;
+}
+
+export interface IMarketCapPercentageWithLogos {
+  symbol : string,
+  logo ?: string,
+  name ?: string,
+  marketCapPercentage : number
+}
+

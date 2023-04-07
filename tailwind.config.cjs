@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       colors : {
         'dark-sub' : '#222531',
-        'dark-main' : '#0B0E11',
+        'dark-main' : '#11161a',
         'colorful-1' : '#0DAFD3',
         'colorful-2' : '#9A33FE',
       },
@@ -15,5 +15,6 @@ module.exports = {
   },
   plugins: [
     require('tailwind-scrollbar'),
+      require('@tailwindcss/line-clamp')
   ],
 }

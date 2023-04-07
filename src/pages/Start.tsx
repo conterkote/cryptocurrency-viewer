@@ -3,7 +3,8 @@ import MainCoinsTableContainer from "../Containers/MainCoinsTableContainer";
 
 function Start() {
   return (
-    <div className="container mx-auto py-32">
+    <div className="mx-auto">
+      <p className={`text-white text-3xl px-10 py-6`}>Trending</p>
       <MainCoinsTableContainer />
     </div>
 

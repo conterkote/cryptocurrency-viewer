@@ -34,7 +34,7 @@ function CoinsTable({ preparedCoinsData, preparedFiatData, isFetching, skeletonC
   else coinRows = <CoinRowsSkeleton rowsCount={skeletonCount ? skeletonCount : 8}/>
 
   return (
-    <div className="w-full grid bg-gradient-to-b from-dark-main rounded-xl to-dark-sub">
+    <div className="w-full grid bg-gradient-to-b from-dark-main/80 rounded-xl to-dark-sub">
       <CoinTableHeader />
       <div className={`min-h-[400px] ${error ? `flex-col flex items-center justify-center` : ''}`}>
         {coinRows}

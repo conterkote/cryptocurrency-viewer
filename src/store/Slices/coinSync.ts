@@ -40,7 +40,7 @@ const coinSync = createSlice({
   reducers : {
   },
   extraReducers(builder) {
-    builder.addMatcher(binancePriceApi.endpoints.fetchLivePrice.matchPending, (state, action) => {
+    builder.addMatcher(binancePriceApi.endpoints.fetchLivePrice.matchPending, (state) => {
       return {
         ...state,
         coinsPriceData : []
@@ -93,5 +93,7 @@ export const selectSyncedCoinsData = (state: RootState) => {
 }
 
 export const selectCurrentLogosStatus = (state: RootState) => state.coinSync.logosStatus
+
+export const selectCoinIcon = (state: RootState) => state.coinSync.logosHashMap
 
 export default coinSync.reducer
