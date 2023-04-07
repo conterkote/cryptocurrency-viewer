@@ -7,7 +7,7 @@ import {RootState} from "../store";
 
 
 const initialState: IConvertSliceState = {
-  currentCurrency : 'RUB',
+  currentCurrency : 'USD',
   currentRatioToUsd : {
 
   },
